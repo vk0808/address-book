@@ -75,7 +75,7 @@ namespace AddressBook
                     }
                     else
                     {
-                        Console.WriteLine("\nAn address is already on file for {0}.", details["First_Name"]);
+                        Console.WriteLine($"\nAn address is already on file for {details["First_Name"]} {details["Last_Name"]}.");
                     }
                     break;
 
@@ -96,11 +96,14 @@ namespace AddressBook
                 /// Edit an existing address
                 case "E":
                     Console.WriteLine("\nEnter the first name: ");
-                    string editPerson = Console.ReadLine();
-                    Person person = find(editPerson);
+                    string editPersonFirst = Console.ReadLine();
+                    Console.WriteLine("\nEnter the last name: ");
+                    string editPersonLast = Console.ReadLine();
+
+                    Person person = find(editPersonFirst, editPersonLast);
                     if (person == null)
                     {
-                        Console.WriteLine("\nAddress for {0} count not be found.", editPerson);
+                        Console.WriteLine($"\nAddress for {editPersonFirst} {editPersonLast} count not be found.");
                     }
                     else
                     {
@@ -111,42 +114,42 @@ namespace AddressBook
                             case 0:
                                 Console.WriteLine("\nEnter new First Name: ");
                                 person.firstName = Console.ReadLine();
-                                Console.WriteLine("\nFirst Name updated for {0}", editPerson);
+                                Console.WriteLine($"\nFirst Name updated for {editPersonFirst} {editPersonLast}");
                                 break;
                             case 1:
                                 Console.WriteLine("\nEnter new Last Name: ");
                                 person.lastName = Console.ReadLine();
-                                Console.WriteLine("\nLast Name updated for {0}", editPerson);
+                                Console.WriteLine($"\nLast Name updated for {editPersonFirst} {editPersonLast}");
                                 break;
                             case 2:
                                 Console.WriteLine("\nEnter new Phone number: ");
                                 person.phoneNumber = Console.ReadLine();
-                                Console.WriteLine("\nPhone Number updated for {0}", editPerson);
+                                Console.WriteLine($"\nPhone Number updated for {editPersonFirst} {editPersonLast}");
                                 break;
                             case 3:
                                 Console.WriteLine("\nEnter new Email ID: ");
                                 person.email = Console.ReadLine();
-                                Console.WriteLine("\nEmail Id updated for {0}", editPerson);
+                                Console.WriteLine($"\nEmail Id updated for {editPersonFirst} {editPersonLast}");
                                 break;
                             case 4:
                                 Console.WriteLine("\nEnter new Address: ");
                                 person.address = Console.ReadLine();
-                                Console.WriteLine("\nAddress updated for {0}", editPerson);
+                                Console.WriteLine($"\nAddress updated for {editPersonFirst} {editPersonLast}");
                                 break;
                             case 5:
                                 Console.WriteLine("\nEnter new City: ");
                                 person.city = Console.ReadLine();
-                                Console.WriteLine("\nCity updated for {0}", editPerson);
+                                Console.WriteLine($"\nCity updated for {editPersonFirst} {editPersonLast}");
                                 break;
                             case 6:
                                 Console.WriteLine("\nEnter new State: ");
                                 person.state = Console.ReadLine();
-                                Console.WriteLine("\nState updated for {0}", editPerson);
+                                Console.WriteLine($"\nState updated for {editPersonFirst} {editPersonLast}");
                                 break;
                             case 7:
                                 Console.WriteLine("\nEnter new ZIP Code: ");
                                 person.zip = Console.ReadLine();
-                                Console.WriteLine("\nZIP Code updated for {0}", editPerson);
+                                Console.WriteLine($"\nZIP Code updated for {editPersonFirst} {editPersonLast}");
                                 break;
                             default:
                                 Console.WriteLine("\nYou have entered wrong index");
@@ -158,14 +161,17 @@ namespace AddressBook
                 /// Delete an address
                 case "D":
                     Console.WriteLine("\nEnter First Name to Delete: ");
-                    string delPerson = Console.ReadLine();
-                    if (delete(delPerson))
+                    string delPersonFirst = Console.ReadLine();
+                    Console.WriteLine("\nEnter Last Name to Delete: ");
+                    string delPersonLast = Console.ReadLine();
+
+                    if (delete(delPersonFirst, delPersonLast))
                     {
                         Console.WriteLine("\nAddress successfully deleted");
                     }
                     else
                     {
-                        Console.WriteLine("\nAddress for {0} could not be found.", delPerson);
+                        Console.WriteLine($"\nAddress for {delPersonFirst} {delPersonLast} could not be found.");
                     }
                     break;
                 
@@ -184,23 +190,24 @@ namespace AddressBook
         private bool add(string firstName, string lastName, string phoneNumber, string email, string address, string city, string state, string zip)
         {
             Person person = new Person(firstName, lastName, phoneNumber, email, address, city, state, zip);
-            Person result = find(firstName);
+            Person result = find(firstName, lastName);
+           
 
-            if (result == null)
+            if (result != null)
+            {
+                return false;
+            }
+            else 
             {
                 People.Add(person);
                 return true;
             }
-            else
-            {
-                return false;
-            }
         }
 
         /// Method to find an address from the list using firstname
-        private Person find(string name)
+        private Person find(string firstName, string lastName)
         {
-            Person info = People.Find((a) => a.firstName == name);
+            Person info = People.Find((a) => (a.firstName == firstName && a.lastName == lastName ));
             return info;
         }
 
@@ -217,9 +224,9 @@ namespace AddressBook
         }
 
         /// Method to delete an address
-        private bool delete(string name)
+        private bool delete(string firstName, string lastName)
         {
-            Person person = find(name);
+            Person person = find(firstName, lastName);
 
             if (person != null)
             {
