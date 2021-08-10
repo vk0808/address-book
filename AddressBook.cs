@@ -8,17 +8,19 @@ namespace AddressBook
     {
         List<Person> People;
 
+        /// Constructor
         public AddressBook()
         {
             People = new List<Person>();
         }
 
-        public string welcome()
+        /// Displays welcome message
+        public void welcome()
         {
-            return "Welcome to Address Book Program\n";
+            Console.WriteLine("Welcome to Address Book Program\n");
         }
 
-
+        /// Method to read option
         public void Selection()
         {
             string choice = "";
@@ -31,7 +33,7 @@ namespace AddressBook
             }
         }
 
-
+        /// Method to display menu
         private void displayMenu()
         {
             Console.WriteLine("\nMain Menu");
@@ -43,8 +45,8 @@ namespace AddressBook
             Console.WriteLine("Q - Quit");
         }
 
-
-        public void performAction(string selection)
+        /// Method to perform operations
+        private void performAction(string selection)
         {
             Dictionary<string, string> details = new Dictionary<string, string>();
             details.Add("First_Name", "");
@@ -58,6 +60,7 @@ namespace AddressBook
 
             switch (selection.ToUpper())
             {
+                /// Adding new Address
                 case "A":
                     List<string> keys = new List<string>(details.Keys);
                     foreach (string key in keys)
@@ -76,6 +79,7 @@ namespace AddressBook
                     }
                     break;
 
+                /// View all addresses
                 case "V":
                     if (isEmpty())
                     {
@@ -89,6 +93,7 @@ namespace AddressBook
                     }
                     break;
 
+                /// Edit an existing address
                 case "E":
                     Console.WriteLine("\nEnter the first name: ");
                     string editPerson = Console.ReadLine();
@@ -150,6 +155,7 @@ namespace AddressBook
                     }
                     break;
 
+                /// Delete an address
                 case "D":
                     Console.WriteLine("\nEnter First Name to Delete: ");
                     string delPerson = Console.ReadLine();
@@ -162,7 +168,8 @@ namespace AddressBook
                         Console.WriteLine("\nAddress for {0} could not be found.", delPerson);
                     }
                     break;
-
+                
+                /// Quit from program
                 case "Q":
                     Console.WriteLine("\nQuitting....");
                     break;
@@ -173,7 +180,8 @@ namespace AddressBook
             }
         }
 
-        public bool add(string firstName, string lastName, string phoneNumber, string email, string address, string city, string state, string zip)
+        /// Method to add address to Person list
+        private bool add(string firstName, string lastName, string phoneNumber, string email, string address, string city, string state, string zip)
         {
             Person person = new Person(firstName, lastName, phoneNumber, email, address, city, state, zip);
             Person result = find(firstName);
@@ -189,23 +197,27 @@ namespace AddressBook
             }
         }
 
-        public Person find(string name)
+        /// Method to find an address from the list using firstname
+        private Person find(string name)
         {
             Person info = People.Find((a) => a.firstName == name);
             return info;
         }
 
-        public void view(Action<Person> action)
+        /// Method to view all addresses
+        private void view(Action<Person> action)
         {
             People.ForEach(action);
         }
 
-        public bool isEmpty()
+        /// Method to check if address book is empty
+        private bool isEmpty()
         {
             return (People.Count == 0);
         }
 
-        public bool delete(string name)
+        /// Method to delete an address
+        private bool delete(string name)
         {
             Person person = find(name);
 

@@ -9,7 +9,7 @@ namespace AddressBook
 
             AddressBook addressBook = new AddressBook();
 
-            Console.WriteLine(addressBook.welcome());
+            addressBook.welcome();
 
             addressBook.Selection();
         }
