@@ -22,10 +22,10 @@ namespace AddressBook
         public void Selection()
         {
             string choice = "";
-            displayMenu();
             while (!choice.ToUpper().Equals("Q"))
             {
-                Console.WriteLine("\nSelection: ");
+                displayMenu();
+                Console.WriteLine("\nSelect an option: ");
                 choice = Console.ReadLine();
                 performAction(choice);
             }
@@ -34,9 +34,10 @@ namespace AddressBook
 
         private void displayMenu()
         {
-            Console.WriteLine("Main Menu");
+            Console.WriteLine("\nMain Menu");
             Console.WriteLine("------------------------------");
             Console.WriteLine("A - Add an Address");
+            Console.WriteLine("E - Edit an Address");
             Console.WriteLine("L - List All Addresses");
             Console.WriteLine("Q - Quit");
         }
@@ -73,6 +74,7 @@ namespace AddressBook
                         Console.WriteLine("\nAn address is already on file for {0}.", details["First_Name"]);
                     }
                     break;
+
                 case "L":
                     if (isEmpty())
                     {
@@ -85,16 +87,77 @@ namespace AddressBook
                         view((item) => Console.WriteLine(msg, item.firstName, item.lastName, item.phoneNumber, item.email, item.address, item.city, item.state, item.zip));
                     }
                     break;
+
+                case "E":
+                    Console.WriteLine("\nEnter the first name: ");
+                    string editPerson = Console.ReadLine();
+                    Person person = find(editPerson);
+                    if (person == null)
+                    {
+                        Console.WriteLine("\nAddress for {0} count not be found.", editPerson);
+                    }
+                    else
+                    {
+                        Console.WriteLine("\nEnter index: \n0: First Name\n1: Last Name\n2: Phone number\n3: Email ID\n4: Address\n5: City\n6: State\n7: ZIP Code");
+                        int editKey = int.Parse(Console.ReadLine());
+                        switch (editKey)
+                        {
+                            case 0:
+                                Console.WriteLine("\nEnter new First Name: ");
+                                person.firstName = Console.ReadLine();
+                                Console.WriteLine("\nFirst Name updated for {0}", editPerson);
+                                break;
+                            case 1:
+                                Console.WriteLine("\nEnter new Last Name: ");
+                                person.lastName = Console.ReadLine();
+                                Console.WriteLine("\nLast Name updated for {0}", editPerson);
+                                break;
+                            case 2:
+                                Console.WriteLine("\nEnter new Phone number: ");
+                                person.phoneNumber = Console.ReadLine();
+                                Console.WriteLine("\nPhone Number updated for {0}", editPerson);
+                                break;
+                            case 3:
+                                Console.WriteLine("\nEnter new Email ID: ");
+                                person.email = Console.ReadLine();
+                                Console.WriteLine("\nEmail Id updated for {0}", editPerson);
+                                break;
+                            case 4:
+                                Console.WriteLine("\nEnter new Address: ");
+                                person.address = Console.ReadLine();
+                                Console.WriteLine("\nAddress updated for {0}", editPerson);
+                                break;
+                            case 5:
+                                Console.WriteLine("\nEnter new City: ");
+                                person.city = Console.ReadLine();
+                                Console.WriteLine("\nCity updated for {0}", editPerson);
+                                break;
+                            case 6:
+                                Console.WriteLine("\nEnter new State: ");
+                                person.state = Console.ReadLine();
+                                Console.WriteLine("\nState updated for {0}", editPerson);
+                                break;
+                            case 7:
+                                Console.WriteLine("\nEnter new ZIP Code: ");
+                                person.zip = Console.ReadLine();
+                                Console.WriteLine("\nZIP Code updated for {0}", editPerson);
+                                break;
+                            default:
+                                Console.WriteLine("\nYou have entered wrong index");
+                                break;
+                        }
+                    }
+                    break;
+
+                case "Q":
+                    Console.WriteLine("\nQuitting....");
+                    break;
+
                 default:
+                    Console.WriteLine("\nYou have entered wrong option");
                     break;
             }
         }
-
-
-
-
-
-
 
         public bool add(string firstName, string lastName, string phoneNumber, string email, string address, string city, string state, string zip)
         {
