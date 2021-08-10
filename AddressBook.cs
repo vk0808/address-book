@@ -36,9 +36,10 @@ namespace AddressBook
         {
             Console.WriteLine("\nMain Menu");
             Console.WriteLine("------------------------------");
+            Console.WriteLine("V - View All Addresses");
             Console.WriteLine("A - Add an Address");
             Console.WriteLine("E - Edit an Address");
-            Console.WriteLine("L - List All Addresses");
+            Console.WriteLine("D - Delete an Address");
             Console.WriteLine("Q - Quit");
         }
 
@@ -75,7 +76,7 @@ namespace AddressBook
                     }
                     break;
 
-                case "L":
+                case "V":
                     if (isEmpty())
                     {
                         Console.WriteLine("\nThere are no entries.");
@@ -149,6 +150,19 @@ namespace AddressBook
                     }
                     break;
 
+                case "D":
+                    Console.WriteLine("\nEnter First Name to Delete: ");
+                    string delPerson = Console.ReadLine();
+                    if (delete(delPerson))
+                    {
+                        Console.WriteLine("\nAddress successfully deleted");
+                    }
+                    else
+                    {
+                        Console.WriteLine("\nAddress for {0} could not be found.", delPerson);
+                    }
+                    break;
+
                 case "Q":
                     Console.WriteLine("\nQuitting....");
                     break;
@@ -189,6 +203,21 @@ namespace AddressBook
         public bool isEmpty()
         {
             return (People.Count == 0);
+        }
+
+        public bool delete(string name)
+        {
+            Person person = find(name);
+
+            if (person != null)
+            {
+                People.Remove(person);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }
