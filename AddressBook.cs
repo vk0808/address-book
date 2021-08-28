@@ -207,7 +207,7 @@ namespace AddressBook
         /// Method to find an address from the list using firstname
         private Person find(string firstName, string lastName)
         {
-            Person info = People.Find((a) => (a.firstName == firstName && a.lastName == lastName ));
+            Person info = People.Find(a => (a.firstName == firstName && a.lastName == lastName ));
             return info;
         }
 
