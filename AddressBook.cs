@@ -88,9 +88,36 @@ namespace AddressBook
                     }
                     else
                     {
-                        Console.WriteLine("\nAddresses:");
-                        string msg = "First Name: {0}\nLast Name: {1}\nPhone Number: {2}\nEmail Id: {3}\nAddress: {4}\nCity: {5}\nState: {6}\nZIP Code: {7}\n";
-                        view((item) => Console.WriteLine(msg, item.firstName, item.lastName, item.phoneNumber, item.email, item.address, item.city, item.state, item.zip));
+                        Console.Write("\nView by\n1. City\n2. State\n3. All\nEnter your option: ");
+                        switch (int.Parse(Console.ReadLine()))
+                        {
+                            case 1:
+                                Console.Write("\nEnter the name of city: ");
+                                string cityName = Console.ReadLine();
+                                Console.WriteLine("\nAddresses:");
+
+                                viewByCityState("city", cityName);
+                                break;
+
+                            case 2:
+                                Console.Write("\nEnter the name of state: ");
+                                string stateName = Console.ReadLine();
+                                Console.WriteLine("\nAddresses:");
+
+                                viewByCityState("state", stateName);
+                                break;
+                            
+                            case 3:
+                                Console.WriteLine("\nAddresses:");
+
+                                string msg = "First Name: {0}\nLast Name: {1}\nPhone Number: {2}\nEmail Id: {3}\nAddress: {4}\nCity: {5}\nState: {6}\nZIP Code: {7}\n";
+                                view((item) => Console.WriteLine(msg, item.firstName, item.lastName, item.phoneNumber, item.email, item.address, item.city, item.state, item.zip));
+                                break;
+
+                            default:
+                                Console.WriteLine("\nInvalid option");
+                                return;
+                        }
                     }
                     break;
 
@@ -240,12 +267,7 @@ namespace AddressBook
             return info;
         }
 
-        /// Method to view all addresses
-        private void view(Action<Person> action)
-        {
-            People.ForEach(action);
-        }
-
+        
         /// Method to check if address book is empty
         private bool isEmpty()
         {
@@ -268,7 +290,34 @@ namespace AddressBook
             }
         }
 
+        /// Method to view all addresses
+        private void view(Action<Person> action)
+        {
+            People.ForEach(action);
+        }
 
+        /// Method to view all addresses by city or state
+        private void viewByCityState(string type, string name)
+        {
+            if (type.ToLower() == "city")
+            {
+                List<Person> info = People.FindAll(a => (a.city == name));
+                string msg = "\nFirst Name: {0}\nLast Name: {1}\nPhone Number: {2}\nEmail Id: {3}\nAddress: {4}\nCity: {5}\nState: {6}\nZIP Code: {7}\n";
+                info.ForEach((item) => Console.WriteLine(msg, item.firstName, item.lastName, item.phoneNumber, item.email, item.address, item.city, item.state, item.zip));
+            }
+            else if (type.ToLower() == "state")
+            {
+                List<Person> info = People.FindAll(a => (a.state == name));
+                string msg = "\nFirst Name: {0}\nLast Name: {1}\nPhone Number: {2}\nEmail Id: {3}\nAddress: {4}\nCity: {5}\nState: {6}\nZIP Code: {7}\n";
+                info.ForEach((item) => Console.WriteLine(msg, item.firstName, item.lastName, item.phoneNumber, item.email, item.address, item.city, item.state, item.zip));
+            }
+            else
+            {
+                Console.WriteLine("\nPerson not found");
+            }
+        }
+
+        /// Method to view person by city
         private void viewByCity(string personName, string name)
         {
             List<Person> info = People.FindAll(a => (a.firstName == personName && a.city == name));
@@ -284,6 +333,7 @@ namespace AddressBook
 
         }
 
+        /// Method to view person by state
         private void viewByState(string personName, string name)
         {
             List<Person> info = People.FindAll(a => (a.firstName == personName && a.state == name));
