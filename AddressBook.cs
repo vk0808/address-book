@@ -41,6 +41,7 @@ namespace AddressBook
             Console.WriteLine("V - View All Addresses");
             Console.WriteLine("A - Add an Address");
             Console.WriteLine("E - Edit an Address");
+            Console.WriteLine("S - Search an Address");
             Console.WriteLine("D - Delete an Address");
             Console.WriteLine("Q - Quit");
         }
@@ -52,11 +53,11 @@ namespace AddressBook
             details.Add("First_Name", "");
             details.Add("Last_Name", "");
             details.Add("Phone_number", "");
-            details.Add("Email_ID","");
+            details.Add("Email_ID", "");
             details.Add("Address", "");
             details.Add("City", "");
             details.Add("State", "");
-            details.Add("ZIP_Code",  "");
+            details.Add("ZIP_Code", "");
 
             switch (selection.ToUpper())
             {
@@ -68,7 +69,7 @@ namespace AddressBook
                         Console.WriteLine($"\nEnter {key}");
                         details[key] = Console.ReadLine();
                     }
-                    
+
                     if (add(details["First_Name"], details["Last_Name"], details["Phone_number"], details["Email_ID"], details["Address"], details["City"], details["State"], details["ZIP_Code"]))
                     {
                         Console.WriteLine("\nAddress successfully added!");
@@ -174,7 +175,35 @@ namespace AddressBook
                         Console.WriteLine($"\nAddress for {delPersonFirst} {delPersonLast} could not be found.");
                     }
                     break;
-                
+
+
+                // Search by city or state
+                case "S":
+                    string personName;
+                    Console.Write("\nSearch by\n1. City\n2. State\nEnter your option: ");
+                    switch (int.Parse(Console.ReadLine()))
+                    {
+                        case 1:
+                            Console.Write("\nEnter the name of city: ");
+                            string cityName = Console.ReadLine();
+                            Console.Write("\nEnter the name of person: ");
+                            personName = Console.ReadLine();
+                            SearchByCityState("city", cityName, personName);
+                            break;
+                        case 2:
+                            Console.Write("\nEnter the name of state: ");
+                            string stateName = Console.ReadLine();
+                            Console.Write("\nEnter the name of person: ");
+                            personName = Console.ReadLine();
+                            SearchByCityState("state", stateName, personName);
+                            break;
+                        default:
+                            Console.WriteLine("\nInvalid option");
+                            return;
+                    }
+                    break;
+
+
                 /// Quit from program
                 case "Q":
                     Console.WriteLine("\nQuitting....");
@@ -191,13 +220,13 @@ namespace AddressBook
         {
             Person person = new Person(firstName, lastName, phoneNumber, email, address, city, state, zip);
             Person result = find(firstName, lastName);
-           
+
 
             if (result != null)
             {
                 return false;
             }
-            else 
+            else
             {
                 People.Add(person);
                 return true;
@@ -207,7 +236,7 @@ namespace AddressBook
         /// Method to find an address from the list using firstname
         private Person find(string firstName, string lastName)
         {
-            Person info = People.Find(a => (a.firstName == firstName && a.lastName == lastName ));
+            Person info = People.Find(a => (a.firstName == firstName && a.lastName == lastName));
             return info;
         }
 
@@ -236,6 +265,56 @@ namespace AddressBook
             else
             {
                 return false;
+            }
+        }
+
+
+        private void viewByCity(string personName, string name)
+        {
+            List<Person> info = People.FindAll(a => (a.firstName == personName && a.city == name));
+            if (info.Count == 0)
+            {
+                Console.WriteLine("\nPerson not found");
+            }
+            else
+            {
+                string msg = "\nFirst Name: {0}\nLast Name: {1}\nPhone Number: {2}\nEmail Id: {3}\nAddress: {4}\nCity: {5}\nState: {6}\nZIP Code: {7}\n";
+                info.ForEach((item) => Console.WriteLine(msg, item.firstName, item.lastName, item.phoneNumber, item.email, item.address, item.city, item.state, item.zip));
+            }
+
+        }
+
+        private void viewByState(string personName, string name)
+        {
+            List<Person> info = People.FindAll(a => (a.firstName == personName && a.state == name));
+            if (info.Count == 0)
+            {
+                Console.WriteLine("\nPerson not found");
+            }
+            else
+            {
+                string msg = "\nFirst Name: {0}\nLast Name: {1}\nPhone Number: {2}\nEmail Id: {3}\nAddress: {4}\nCity: {5}\nState: {6}\nZIP Code: {7}\n";
+                info.ForEach((item) => Console.WriteLine(msg, item.firstName, item.lastName, item.phoneNumber, item.email, item.address, item.city, item.state, item.zip));
+            }
+        }
+
+        // Method to search
+        private void SearchByCityState(string type, string name, string personName)
+        {
+            if (isEmpty())
+            {
+                Console.WriteLine("\nAdress book is empty");
+            }
+            else
+            {
+                if (type.ToLower() == "city")
+                {
+                    viewByCity(personName, name);
+                }
+                else if (type.ToLower() == "state")
+                {
+                    viewByState(personName, name);
+                }
             }
         }
     }
