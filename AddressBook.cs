@@ -109,7 +109,7 @@ namespace AddressBook
                             
                             case 3:
                                 Console.WriteLine("\nAddresses:");
-
+                                Console.WriteLine($"Count: {People.Count}");
                                 string msg = "First Name: {0}\nLast Name: {1}\nPhone Number: {2}\nEmail Id: {3}\nAddress: {4}\nCity: {5}\nState: {6}\nZIP Code: {7}\n";
                                 view((item) => Console.WriteLine(msg, item.firstName, item.lastName, item.phoneNumber, item.email, item.address, item.city, item.state, item.zip));
                                 break;
@@ -302,12 +302,14 @@ namespace AddressBook
             if (type.ToLower() == "city")
             {
                 List<Person> info = People.FindAll(a => (a.city == name));
+                Console.WriteLine($"\nCount: {info.Count}");
                 string msg = "\nFirst Name: {0}\nLast Name: {1}\nPhone Number: {2}\nEmail Id: {3}\nAddress: {4}\nCity: {5}\nState: {6}\nZIP Code: {7}\n";
                 info.ForEach((item) => Console.WriteLine(msg, item.firstName, item.lastName, item.phoneNumber, item.email, item.address, item.city, item.state, item.zip));
             }
             else if (type.ToLower() == "state")
             {
                 List<Person> info = People.FindAll(a => (a.state == name));
+                Console.WriteLine($"\nCount: {info.Count}");
                 string msg = "\nFirst Name: {0}\nLast Name: {1}\nPhone Number: {2}\nEmail Id: {3}\nAddress: {4}\nCity: {5}\nState: {6}\nZIP Code: {7}\n";
                 info.ForEach((item) => Console.WriteLine(msg, item.firstName, item.lastName, item.phoneNumber, item.email, item.address, item.city, item.state, item.zip));
             }
