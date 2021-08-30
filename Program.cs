@@ -12,6 +12,10 @@ namespace AddressBook
             addressBook.welcome();
 
             addressBook.Selection();
+
+            addressBook.WriteCSV();
+            addressBook.ReadCSV();
+
         }
     }
 }

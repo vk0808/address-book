@@ -6,14 +6,14 @@ namespace AddressBook
 {
     public class Person
     {
-        public string firstName;
-        public string lastName;
-        public string phoneNumber;
-        public string email;
-        public string address;
-        public string city;
-        public string state;
-        public string zip;
+        public string firstName { get; set; }
+        public string lastName { get; set; }
+        public string phoneNumber { get; set; }
+        public string email { get; set; }
+        public string address { get; set; }
+        public string city { get; set; }
+        public string state { get; set; }
+        public string zip { get; set; }
 
         public Person(string firstName, string lastName, string phoneNumber, string email, string address, string city, string state, string zip)
         {

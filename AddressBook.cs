@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using System.IO;
+using System.Globalization;
+using CsvHelper;
+using Newtonsoft.Json;
 
 namespace AddressBook
 {
@@ -28,7 +31,7 @@ namespace AddressBook
         /// Method to read from file
         private void ReadFromFile()
         {
-            string filePath = @"../../../AddressBook.txt";
+            string filePath = @"../../../Utility/AddressBook.txt";
             try
             {
                 string[] fileContents = File.ReadAllLines(filePath);
@@ -53,6 +56,78 @@ namespace AddressBook
 
         }
 
+
+        /// Method to write to csv file
+        public void WriteCSV()
+        {
+            string exportFilePath = @"../../../Utility/Address.csv";
+
+
+            using (var writer = new StreamWriter(exportFilePath))
+            using (var csvWriter = new CsvWriter(writer, CultureInfo.InvariantCulture))
+            {
+                ////csvWriter.WriteRecords(People);
+
+                //csvWriter.WriteField("First_Name");
+                //csvWriter.WriteField("Last_Name");
+                //csvWriter.WriteField("Phone_number");
+                //csvWriter.WriteField("Email_ID");
+                //csvWriter.WriteField("Address");
+                //csvWriter.WriteField("City");
+                //csvWriter.WriteField("State");
+                //csvWriter.WriteField("ZIP_Code");
+                //csvWriter.NextRecord();
+
+                foreach (Person person in People)
+                {
+                    csvWriter.WriteField(person.firstName);
+                    csvWriter.WriteField(person.lastName);
+                    csvWriter.WriteField(person.phoneNumber);
+                    csvWriter.WriteField(person.email);
+                    csvWriter.WriteField(person.address);
+                    csvWriter.WriteField(person.city);
+                    csvWriter.WriteField(person.state);
+                    csvWriter.WriteField(person.zip);
+                    csvWriter.NextRecord();
+                }
+            }
+            Console.WriteLine("\nWrite data successfully to Export.csv\n");
+        }
+
+
+        /// Method to read from csv file
+        public void ReadCSV()
+        {
+            string importFilePath = @"../../../Utility/Address.csv";
+
+            // config for no header
+            var config = new CsvHelper.Configuration.CsvConfiguration(CultureInfo.InvariantCulture)
+            {
+                HasHeaderRecord = false,
+            };
+
+            using (var reader = new StreamReader(importFilePath))
+            using (var csv = new CsvReader(reader, config))
+            {
+                IEnumerable<Person> records = csv.GetRecords<Person>();
+                Console.WriteLine("\nRead data successfully from Address.csv\n");
+                Console.Write($"\n{"firstname",10} |{"lastname",10} |{"phone",15} |{"email",25} |{"address",20} |{"city",15} |{"state",15} |{"zip-code",10} |\n");
+                Console.Write($"{new string('-', 134)} |\n");
+
+                foreach (Person addressData in records)
+                {
+                    Console.Write($"{addressData.firstName,10} |");
+                    Console.Write($"{addressData.lastName,10} |");
+                    Console.Write($"{addressData.phoneNumber,15} |");
+                    Console.Write($"{addressData.email,25} |");
+                    Console.Write($"{addressData.address,20} |");
+                    Console.Write($"{addressData.city,15} |");
+                    Console.Write($"{addressData.state,15} |");
+                    Console.Write($"{addressData.zip,10} |\n");
+                }
+                Console.Write($"{new string('-', 134)} |\n\n");
+            }
+        }
 
         /// Method to read option
         public void Selection()
@@ -145,8 +220,7 @@ namespace AddressBook
                             case 3:
                                 Console.WriteLine("\nAddresses:");
                                 Console.WriteLine($"Count: {People.Count}");
-                                string msg = "First Name: {0}\nLast Name: {1}\nPhone Number: {2}\nEmail Id: {3}\nAddress: {4}\nCity: {5}\nState: {6}\nZIP Code: {7}\n";
-                                view((item) => Console.WriteLine(msg, item.firstName, item.lastName, item.phoneNumber, item.email, item.address, item.city, item.state, item.zip));
+                                view(People);
                                 break;
 
                             default:
@@ -333,9 +407,23 @@ namespace AddressBook
         }
 
         /// Method to view all addresses
-        private void view(Action<Person> action)
+        private void view(List<Person> records)
         {
-            People.ForEach(action);
+            Console.Write($"\n{"firstname",10} |{"lastname",10} |{"phone",15} |{"email",25} |{"address",20} |{"city",15} |{"state",15} |{"zip-code",10} |\n");
+            Console.Write($"{new string('-', 134)} |\n");
+
+            foreach (Person addressData in records)
+            {
+                Console.Write($"{addressData.firstName,10} |");
+                Console.Write($"{addressData.lastName,10} |");
+                Console.Write($"{addressData.phoneNumber,15} |");
+                Console.Write($"{addressData.email,25} |");
+                Console.Write($"{addressData.address,20} |");
+                Console.Write($"{addressData.city,15} |");
+                Console.Write($"{addressData.state,15} |");
+                Console.Write($"{addressData.zip,10} |\n");
+            }
+            Console.Write($"{new string('-', 134)} |\n\n");
         }
 
         /// Method to view all addresses by city or state
@@ -345,15 +433,13 @@ namespace AddressBook
             {
                 List<Person> info = People.FindAll(a => (a.city == name));
                 Console.WriteLine($"\nCount: {info.Count}");
-                string msg = "\nFirst Name: {0}\nLast Name: {1}\nPhone Number: {2}\nEmail Id: {3}\nAddress: {4}\nCity: {5}\nState: {6}\nZIP Code: {7}\n";
-                info.ForEach((item) => Console.WriteLine(msg, item.firstName, item.lastName, item.phoneNumber, item.email, item.address, item.city, item.state, item.zip));
+                view(info);
             }
             else if (type.ToLower() == "state")
             {
                 List<Person> info = People.FindAll(a => (a.state == name));
                 Console.WriteLine($"\nCount: {info.Count}");
-                string msg = "\nFirst Name: {0}\nLast Name: {1}\nPhone Number: {2}\nEmail Id: {3}\nAddress: {4}\nCity: {5}\nState: {6}\nZIP Code: {7}\n";
-                info.ForEach((item) => Console.WriteLine(msg, item.firstName, item.lastName, item.phoneNumber, item.email, item.address, item.city, item.state, item.zip));
+                view(info);
             }
             else
             {
@@ -371,8 +457,7 @@ namespace AddressBook
             }
             else
             {
-                string msg = "\nFirst Name: {0}\nLast Name: {1}\nPhone Number: {2}\nEmail Id: {3}\nAddress: {4}\nCity: {5}\nState: {6}\nZIP Code: {7}\n";
-                info.ForEach((item) => Console.WriteLine(msg, item.firstName, item.lastName, item.phoneNumber, item.email, item.address, item.city, item.state, item.zip));
+                view(info);
             }
 
         }
@@ -387,8 +472,7 @@ namespace AddressBook
             }
             else
             {
-                string msg = "\nFirst Name: {0}\nLast Name: {1}\nPhone Number: {2}\nEmail Id: {3}\nAddress: {4}\nCity: {5}\nState: {6}\nZIP Code: {7}\n";
-                info.ForEach((item) => Console.WriteLine(msg, item.firstName, item.lastName, item.phoneNumber, item.email, item.address, item.city, item.state, item.zip));
+                view(info);
             }
         }
 
@@ -416,8 +500,7 @@ namespace AddressBook
         private void SortList()
         {
             People = People.OrderBy(person => person.city).ToList();
-            string msg = "First Name: {0}\nLast Name: {1}\nPhone Number: {2}\nEmail Id: {3}\nAddress: {4}\nCity: {5}\nState: {6}\nZIP Code: {7}\n";
-            view((item) => Console.WriteLine(msg, item.firstName, item.lastName, item.phoneNumber, item.email, item.address, item.city, item.state, item.zip));
+            view(People);
         }
     }
 }

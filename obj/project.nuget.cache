@@ -1,8 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "PSsB884RE0KrEVKwyVRgn6+/b8SXym97777KZMuLfUIvb0Pj9fnm+YgVIWNOE82xLyUL44k/+egywCcDDYE6Ww==",
+  "dgSpecHash": "v66L7QxIb31hfe+TL4EGuUZk+X1FG3j0rX74olrynCjYcWO6EXAupWY2Rb5iBWJbMgBM74RbrLhnDHs6cvwUDw==",
   "success": true,
   "projectFilePath": "C:\\Users\\vk476\\Desktop\\Fellowship Program\\Practice Problems\\Day9Problems\\AddressBook\\AddressBook\\AddressBook.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\vk476\\.nuget\\packages\\csvhelper\\27.1.1\\csvhelper.27.1.1.nupkg.sha512",
+    "C:\\Users\\vk476\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",
+    "C:\\Users\\vk476\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512"
+  ],
   "logs": []
 }
