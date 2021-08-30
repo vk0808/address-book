@@ -2,17 +2,20 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
+using System.IO;
 
 namespace AddressBook
 {
     public class AddressBook
     {
         List<Person> People;
+        List<Person> contacts;
 
         /// Constructor
         public AddressBook()
         {
             People = new List<Person>();
+            ReadFromFile();
         }
 
         /// Displays welcome message
@@ -20,6 +23,36 @@ namespace AddressBook
         {
             Console.WriteLine("Welcome to Address Book Program\n");
         }
+
+
+        /// Method to read from file
+        private void ReadFromFile()
+        {
+            string filePath = @"../../../AddressBook.txt";
+            try
+            {
+                string[] fileContents = File.ReadAllLines(filePath);
+                contacts = new List<Person>();
+                foreach (string line in fileContents)
+                {
+                    if (line.Contains(","))
+                    {
+                        string[] address = line.Split(",");
+                        if (!add(address[0], address[1], address[2], address[3], address[4], address[5], address[6], address[7]))
+                        {
+                            Console.WriteLine($"An address is already on file for {address[0]} {address[1]}\n");
+                        }
+                    }
+                }
+                Console.WriteLine("Address book successfully read!\n");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+        }
+
 
         /// Method to read option
         public void Selection()
