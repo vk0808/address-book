@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 
 namespace AddressBook
 {
@@ -43,6 +44,7 @@ namespace AddressBook
             Console.WriteLine("E - Edit an Address");
             Console.WriteLine("S - Search an Address");
             Console.WriteLine("D - Delete an Address");
+            Console.WriteLine("O - Sort Addresses");
             Console.WriteLine("Q - Quit");
         }
 
@@ -236,6 +238,13 @@ namespace AddressBook
                     Console.WriteLine("\nQuitting....");
                     break;
 
+
+                /// Sort the list by city
+                case "O":
+                    SortList();
+                    break;
+
+
                 default:
                     Console.WriteLine("\nYou have entered wrong option");
                     break;
@@ -368,6 +377,14 @@ namespace AddressBook
                     viewByState(personName, name);
                 }
             }
+        }
+
+        /// Method to sort list by city
+        private void SortList()
+        {
+            People = People.OrderBy(person => person.city).ToList();
+            string msg = "First Name: {0}\nLast Name: {1}\nPhone Number: {2}\nEmail Id: {3}\nAddress: {4}\nCity: {5}\nState: {6}\nZIP Code: {7}\n";
+            view((item) => Console.WriteLine(msg, item.firstName, item.lastName, item.phoneNumber, item.email, item.address, item.city, item.state, item.zip));
         }
     }
 }
