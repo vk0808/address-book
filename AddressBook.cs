@@ -24,7 +24,7 @@ namespace AddressBook
         /// Displays welcome message
         public void welcome()
         {
-            Console.WriteLine("Welcome to Address Book Program\n");
+            Console.WriteLine("\nWelcome to Address Book Program\n");
         }
 
 
@@ -47,7 +47,40 @@ namespace AddressBook
                         }
                     }
                 }
-                Console.WriteLine("Address book successfully read!\n");
+                Console.WriteLine("\nAddress book successfully read!\n");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+
+        /// Method to write to file
+        private void WriteToFile()
+        {
+            string filePath = @"../../../Utility/AddressBook.txt";
+
+            try
+            {
+                if (People.Count > 0)
+                {
+                    File.WriteAllText(filePath, string.Empty);
+
+                    // Appending the values in address book
+                    foreach (var addressBook in People)
+                    {
+                        string text = $"{addressBook.firstName},{addressBook.lastName},{addressBook.phoneNumber},{addressBook.email},{addressBook.address},{addressBook.city},{addressBook.state},{addressBook.zip}\n";
+                        File.AppendAllText(filePath, text);
+                    }
+                    Console.WriteLine("\nWrite data successfully to file");
+                }
+                else
+                {
+                    Console.WriteLine("\nAddressBook List is Empty");
+                }
+
+
             }
             catch (Exception ex)
             {
@@ -56,12 +89,10 @@ namespace AddressBook
 
         }
 
-
         /// Method to write to csv file
         public void WriteCSV()
         {
             string exportFilePath = @"../../../Utility/Address.csv";
-
 
             using (var writer = new StreamWriter(exportFilePath))
             using (var csvWriter = new CsvWriter(writer, CultureInfo.InvariantCulture))
@@ -91,7 +122,7 @@ namespace AddressBook
                     csvWriter.NextRecord();
                 }
             }
-            Console.WriteLine("\nWrite data successfully to Export.csv\n");
+            Console.WriteLine("\nWrite data successfully to Address.csv\n");
         }
 
 
@@ -128,6 +159,48 @@ namespace AddressBook
                 Console.Write($"{new string('-', 134)} |\n\n");
             }
         }
+
+
+        /// Method to write to json file
+        public void WriteJSON()
+        {
+            string exportFilePath = @"../../../Utility/Address.json";
+            JsonSerializer serializer = new JsonSerializer();
+            using (StreamWriter sw = new StreamWriter(exportFilePath))
+            using (JsonWriter writer = new JsonTextWriter(sw))
+            {
+                serializer.Serialize(writer, People);
+            }
+            Console.WriteLine("\nWrite data successfully to Address.json\n");
+        }
+
+
+        /// Method to read from json file
+        public void ReadJSON()
+        {
+            string importFilePath = @"../../../Utility/Address.json";
+
+            Console.WriteLine("\nRead data successfully from Address.json\n");
+
+            IList<Person> records = JsonConvert.DeserializeObject<IList<Person>>(File.ReadAllText(importFilePath));
+            Console.WriteLine("\nRead data successfully from Address.json\n");
+            Console.Write($"\n{"firstname",10} |{"lastname",10} |{"phone",15} |{"email",25} |{"address",20} |{"city",15} |{"state",15} |{"zip-code",10} |\n");
+            Console.Write($"{new string('-', 134)} |\n");
+
+            foreach (Person addressData in records)
+            {
+                Console.Write($"{addressData.firstName,10} |");
+                Console.Write($"{addressData.lastName,10} |");
+                Console.Write($"{addressData.phoneNumber,15} |");
+                Console.Write($"{addressData.email,25} |");
+                Console.Write($"{addressData.address,20} |");
+                Console.Write($"{addressData.city,15} |");
+                Console.Write($"{addressData.state,15} |");
+                Console.Write($"{addressData.zip,10} |\n");
+            }
+            Console.Write($"{new string('-', 134)} |\n\n");
+        }
+
 
         /// Method to read option
         public void Selection()
@@ -342,6 +415,7 @@ namespace AddressBook
 
                 /// Quit from program
                 case "Q":
+                    WriteToFile();
                     Console.WriteLine("\nQuitting....");
                     break;
 
@@ -431,13 +505,13 @@ namespace AddressBook
         {
             if (type.ToLower() == "city")
             {
-                List<Person> info = People.FindAll(a => (a.city == name));
+                List<Person> info = People.FindAll(a => (a.city.ToLower() == name.ToLower()));
                 Console.WriteLine($"\nCount: {info.Count}");
                 view(info);
             }
             else if (type.ToLower() == "state")
             {
-                List<Person> info = People.FindAll(a => (a.state == name));
+                List<Person> info = People.FindAll(a => (a.state.ToLower() == name.ToLower()));
                 Console.WriteLine($"\nCount: {info.Count}");
                 view(info);
             }
@@ -450,7 +524,7 @@ namespace AddressBook
         /// Method to view person by city
         private void viewByCity(string personName, string name)
         {
-            List<Person> info = People.FindAll(a => (a.firstName == personName && a.city == name));
+            List<Person> info = People.FindAll(a => (a.firstName.ToLower() == personName.ToLower() && a.city.ToLower() == name.ToLower()));
             if (info.Count == 0)
             {
                 Console.WriteLine("\nPerson not found");
@@ -465,7 +539,7 @@ namespace AddressBook
         /// Method to view person by state
         private void viewByState(string personName, string name)
         {
-            List<Person> info = People.FindAll(a => (a.firstName == personName && a.state == name));
+            List<Person> info = People.FindAll(a => (a.firstName.ToLower() == personName.ToLower() && a.state.ToLower() == name.ToLower()));
             if (info.Count == 0)
             {
                 Console.WriteLine("\nPerson not found");
